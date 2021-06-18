@@ -1,0 +1,246 @@
+$breakpoints: (
+  "gt-lg": 'screen and (min-width: 1920px)',
+  "gt-md": 'screen and (min-width: 1280px)',
+  "gt-sm": 'screen and (min-width: 960px)',
+  "gt-xs": 'screen and (min-width: 600px)',
+  "lt-xl": 'screen and (max-width: 1919.98px)',
+  "lt-lg": 'screen and (max-width: 1279.98px)',
+  "lt-md": 'screen and (max-width: 959.98px)',
+  "lt-sm": 'screen and (max-width: 599.98px)',
+  "xl": 'screen and (min-width: 1920px) and (max-width: 4999.98px)',
+  "lg": 'screen and (min-width: 1280px) and (max-width: 1919.98px)',
+  "md": 'screen and (min-width: 960px) and (max-width: 1279.98px)',
+  "sm": 'screen and (min-width: 600px) and (max-width: 959.98px)',
+  "xs": 'screen and (min-width: 0px) and (max-width: 599.98px)',
+);
+
+$layout-aligns: (
+  "start": 'flex-start',
+  "end": 'flex-end',
+  "center": 'center',
+  "space-between": 'space-between',
+  "space-around": 'space-around',
+  "space-evenly": 'space-evenly'
+);
+
+$item-aligns: (
+  "start": 'flex-start',
+  "end": 'flex-end',
+  "center": 'center',
+  "stretch": 'stretch',
+  "baseline": 'baseline'
+);
+
+@mixin data-gap($direction: 'row') {
+  @for $i from 1 through 100 {
+    &[data-gap~='#{$i}px'] {
+      > * {
+        @if $direction == 'row' {
+          margin-right: #{$i}px;
+        }
+        @else {
+          margin-bottom: #{$i}px;
+          margin-right: 0px;
+        }
+      }
+
+      > *:last-child {
+        @if $direction == 'row' {
+          margin-right: 0px;
+        }
+        @else {
+          margin-bottom: 0px;
+        }
+      }
+    }
+  }
+}
+
+@mixin data-layout($breakpoint: '') {
+  $sufix: if($breakpoint == '', '', '-' + $breakpoint);
+  $important: if($breakpoint == '', '', ' !important');
+
+  [data-layout#{$sufix}] {
+    display: flex#{$important};
+    box-sizing: border-box#{$important};
+    width: 100%;
+
+    /*Direction*/
+    &[data-layout#{$sufix}^="row"] {
+      flex-direction: row#{$important};
+      @include data-gap('row');
+    }
+
+    &[data-layout#{$sufix}^="row-reverse"] {
+      flex-direction: row-reverse#{$important};
+      @include data-gap('row');
+    }
+
+    &[data-layout#{$sufix}^="column"] {
+      flex-direction: column#{$important};
+      @include data-gap('column');
+    }
+
+    &[data-layout#{$sufix}^="column-reverse"] {
+      flex-direction: column-reverse#{$important};
+      @include data-gap('column');
+    }
+
+    /*Align*/
+    @each $align_name, $aling in $layout-aligns {
+      &[data-layout#{$sufix}~=#{$align_name}] {
+        justify-content: #{$aling}#{$important};
+      }
+    }
+
+    /*Item Align*/
+    @each $align_name, $aling in $item-aligns {
+      &[data-layout#{$sufix}~=items-#{$align_name}] {
+        align-items: #{$aling}#{$important};
+      }
+    }
+
+    /*Wrap*/
+    &[data-layout#{$sufix}~="wrap"] {
+      flex-wrap: wrap#{$important};
+    }
+
+    &[data-layout#{$sufix}~="nowrap"] {
+      flex-wrap: nowrap#{$important};
+    }
+
+    &[data-layout#{$sufix}~="wrap-reverse"] {
+      flex-wrap: wrap-reverse#{$important};
+    }
+  }
+
+  [data-fill#{$sufix}] {
+    height: 100%#{$important};
+    min-height: 100%#{$important};
+    max-height: 100%#{$important};
+    width: 100%#{$important};
+    min-width: 100%#{$important};
+    max-width: 100%#{$important};
+  }
+
+  [data-hide#{$sufix}] {
+    display: none#{$important};
+  }
+
+  @if $breakpoint == '' {
+    [data-hide="true"] {
+      display: none !important;
+    }
+  }
+
+  @if $breakpoint == '' {
+    [data-hide="false"] {
+      display: grid !important;
+    }
+  }
+
+  /*Layout Align*/
+  @each $align_name, $aling in $layout-aligns {
+    [data-layout-align#{$sufix}~=#{$align_name}] {
+      justify-content: #{$aling}#{$important};
+    }
+  }
+
+
+  /*Layout Align Items*/
+  @each $align_name, $aling in $layout-aligns {
+    [data-layout-align#{$sufix}~=items-#{$align_name}] {
+      align-content: #{$aling}#{$important};
+      align-items: #{$aling}#{$important};
+    }
+  }
+
+  @include data-flex($breakpoint);
+}
+
+@mixin data-flex($breakpoint: '') {
+  $sufix: if($breakpoint == '', '', '-' + $breakpoint);
+  $important: if($breakpoint == '', '', ' !important');
+
+  [data-flex#{$sufix}] {
+    flex: 1 1 0%#{$important};
+    min-width: initial#{$important};
+    max-width: initial#{$important};
+    box-sizing: border-box#{$important};
+
+    /*Item Align*/
+    @each $align_name, $aling in $item-aligns {
+      &[data-flex#{$sufix}~=#{$align_name}] {
+        align-self: #{$aling}#{$important};
+      }
+    }
+
+    @for $i from 1 through 100 {
+      &[data-flex#{$sufix}~='w#{$i}%'] {
+        flex: 1 1 #{$i * 1%}#{$important};
+        min-width: #{$i * 1%}#{$important};
+        max-width: #{$i * 1%}#{$important};
+      }
+
+      &[data-flex#{$sufix}~='h#{$i}%'] {
+        flex: 1 1 #{$i * 1%}#{$important};
+        height: #{$i * 1%}#{$important};
+        min-height: #{$i * 1%}#{$important};
+        max-height: #{$i * 1%}#{$important};
+      }
+    }
+
+    @for $i from 1 through 1024 {
+      &[data-flex#{$sufix}~='w#{$i}px'] {
+        flex: 1 1 #{$i}px#{$important};
+        min-width: #{$i}px#{$important};
+        max-width: #{$i}px#{$important};
+      }
+
+      &[data-flex#{$sufix}~='h#{$i}px'] {
+        flex: 1 1 #{$i}px !important;
+        height: #{$i}px#{$important};
+        min-height: #{$i}px#{$important};
+        max-height: #{$i}px#{$important};
+      }
+    }
+
+    @for $i from 1025 through 1920 {
+      @if $i % 10 == 0 {
+        &[data-flex#{$sufix}~='w#{$i}px'] {
+          flex: 1 1 #{$i}px#{$important};
+          min-width: #{$i}px#{$important};
+          max-width: #{$i}px#{$important};
+        }
+
+        &[data-flex#{$sufix}~='h#{$i}px'] {
+          flex: 1 1 #{$i}px !important;
+          height: #{$i}px#{$important};
+          min-height: #{$i}px#{$important};
+          max-height: #{$i}px#{$important};
+        }
+      }
+    }
+  }
+
+  @for $i from 1 through 100 {
+    [data-offset#{$sufix}~='w#{$i}px'] {
+      margin-left: #{$i}px#{$important};
+    }
+  }
+
+  /*Item Align*/
+  @each $align_name, $aling in $item-aligns {
+    [data-flex-align#{$sufix}=#{$align_name}] {
+      align-self: #{$aling}#{$important};
+    }
+  }
+}
+
+@include data-layout();
+
+@each $breakpoint, $media-query in $breakpoints {
+  @media #{$media-query} {
+    @include data-layout($breakpoint);
+  }
+}
