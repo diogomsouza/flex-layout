@@ -23,7 +23,17 @@ $layout-aligns: (
   "space-evenly": 'space-evenly'
 );
 
-$item-aligns: (
+$perpendicular-aligns: (
+  "start": 'flex-start',
+  "end": 'flex-end',
+  "center": 'center',
+  "space-between": 'space-between',
+  "space-around": 'space-around',
+  "space-evenly": 'space-evenly',
+  "baseline": 'baseline'
+);
+
+$flex-aligns: (
   "start": 'flex-start',
   "end": 'flex-end',
   "center": 'center',
@@ -93,10 +103,11 @@ $item-aligns: (
       }
     }
 
-    /*Item Align*/
-    @each $align_name, $aling in $item-aligns {
-      &[data-layout#{$sufix}~=items-#{$align_name}] {
+    /*Perpendicular Align*/
+    @each $align_name, $aling in $perpendicular-aligns {
+      &[data-layout#{$sufix}~=p-#{$align_name}] {
         align-items: #{$aling}#{$important};
+        align-content: #{$aling}#{$important};
       }
     }
 
@@ -146,12 +157,11 @@ $item-aligns: (
     }
   }
 
-
-  /*Layout Align Items*/
-  @each $align_name, $aling in $layout-aligns {
-    [data-layout-align#{$sufix}~=items-#{$align_name}] {
-      align-content: #{$aling}#{$important};
+  /*Layout Perpendicular Align*/
+  @each $align_name, $aling in $perpendicular-aligns {
+    [data-layout-align#{$sufix}~=p-#{$align_name}] {
       align-items: #{$aling}#{$important};
+      align-content: #{$aling}#{$important};
     }
   }
 
@@ -169,7 +179,7 @@ $item-aligns: (
     box-sizing: border-box#{$important};
 
     /*Item Align*/
-    @each $align_name, $aling in $item-aligns {
+    @each $align_name, $aling in $flex-aligns {
       &[data-flex#{$sufix}~=#{$align_name}] {
         align-self: #{$aling}#{$important};
       }
@@ -230,7 +240,7 @@ $item-aligns: (
   }
 
   /*Item Align*/
-  @each $align_name, $aling in $item-aligns {
+  @each $align_name, $aling in $flex-aligns {
     [data-flex-align#{$sufix}=#{$align_name}] {
       align-self: #{$aling}#{$important};
     }

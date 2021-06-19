@@ -13,6 +13,6 @@ export class AppComponent {
   };
 
   layoutAlign() {
-    return `${this.options.mainAxis} items-${this.options.crossAxis}`;
+    return `${this.options.mainAxis} p-${this.options.crossAxis}`;
   }
 }
