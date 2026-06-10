@@ -63,6 +63,48 @@ $flex-aligns: (
         }
       }
     }
+
+    &[data-gap~='w#{$i}px'] {
+      > * {
+        @if $direction == 'row' {
+          margin-right: #{$i}px;
+        }
+        @else {
+          margin-bottom: 0px;
+          margin-right: 0px;
+        }
+      }
+
+      > *:last-child {
+        @if $direction == 'row' {
+          margin-right: 0px;
+        }
+        @else {
+          margin-bottom: 0px;
+        }
+      }
+    }
+
+    &[data-gap~='h#{$i}px'] {
+      > * {
+        @if $direction == 'row' {
+          margin-right: 0px;
+        }
+        @else {
+          margin-bottom: #{$i}px;
+          margin-right: 0px;
+        }
+      }
+
+      > *:last-child {
+        @if $direction == 'row' {
+          margin-right: 0px;
+        }
+        @else {
+          margin-bottom: 0px;
+        }
+      }
+    }
   }
 }
 
