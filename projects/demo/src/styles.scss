@@ -1,0 +1,55 @@
+@use "../../flex-layout/src/styles/flex-layout";
+
+:root {
+  color-scheme: light;
+  --demo-bg: #f4f6f8;
+  --demo-surface: #ffffff;
+  --demo-surface-strong: #18202a;
+  --demo-text: #1f2933;
+  --demo-muted: #64748b;
+  --demo-border: #d8dee6;
+  --demo-accent: #0f766e;
+  --demo-accent-strong: #115e59;
+  --demo-accent-soft: #d7f3ee;
+  --demo-code: #111827;
+  --demo-code-bg: #eef2f7;
+  --demo-shadow: 0 18px 44px rgba(25, 35, 50, 0.09);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--demo-bg);
+  color: var(--demo-text);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button {
+  border: 0;
+}
+
+code,
+pre {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+}
+
+a {
+  color: inherit;
+}

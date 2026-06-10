@@ -1,0 +1,191 @@
+<header class="app-header">
+  <nav class="topbar" aria-label="Primary navigation">
+    <a class="brand" href="#playground" aria-label="Flex Layout demo home">
+      <span class="brand-mark">FL</span>
+      <span>Flex Layout</span>
+    </a>
+    <div class="nav-links">
+      <a href="#playground">Playground</a>
+      <a href="#api">API</a>
+      <a href="#publish">Publish</a>
+    </div>
+  </nav>
+
+  <section class="hero" data-layout="row" data-layout-lt-md="column" data-gap="32px">
+    <div class="hero-copy" data-flex>
+      <p class="eyebrow">&#64;stagyra/flex-layout</p>
+      <h1>Responsive SCSS layout utilities with data attributes.</h1>
+      <p class="hero-text">
+        A publishable package and demo for flexbox layout, breakpoints, gap, sizing, visibility, and responsive behavior.
+      </p>
+      <div class="hero-actions" data-layout="row wrap" data-gap="12px">
+        <a class="button primary" href="#playground">Open playground</a>
+        <a class="button secondary" href="https://github.com/diogomsouza/flex-layout" target="_blank" rel="noreferrer">GitHub</a>
+      </div>
+    </div>
+
+    <div class="hero-board" data-flex="basis" data-flex-lt-md="w100%" style="--fl-basis: 440px">
+      <div class="viewport-pill">
+        <span>{{ viewportWidth }}px</span>
+        <strong>{{ activeBreakpoint }}</strong>
+      </div>
+      <div class="mini-layout" data-layout="row wrap" data-gap="12px">
+        <span data-flex="w50%" data-flex-xs="w100%"></span>
+        <span data-flex="w50%" data-flex-xs="w100%"></span>
+        <span data-flex="w33%" data-flex-xs="w100%"></span>
+        <span data-flex="w67%" data-flex-xs="w100%"></span>
+      </div>
+    </div>
+  </section>
+</header>
+
+<main>
+  <section id="playground" class="section">
+    <div class="section-heading">
+      <p class="eyebrow">Live playground</p>
+      <h2>Compose the attributes and inspect the result.</h2>
+    </div>
+
+    <div class="playground-shell" data-layout="row" data-layout-lt-lg="column" data-gap="24px">
+      <form class="controls" data-flex="basis" data-flex-lt-lg="w100%" style="--fl-basis: 360px">
+        <label>
+          Direction
+          <select [(ngModel)]="direction" name="direction">
+            <option *ngFor="let option of directions" [value]="option">{{ option }}</option>
+          </select>
+        </label>
+
+        <label>
+          Main axis
+          <select [(ngModel)]="mainAxis" name="mainAxis">
+            <option *ngFor="let option of mainAxisOptions" [value]="option">{{ option }}</option>
+          </select>
+        </label>
+
+        <label>
+          Cross axis
+          <select [(ngModel)]="crossAxis" name="crossAxis">
+            <option *ngFor="let option of crossAxisOptions" [value]="option">{{ option }}</option>
+          </select>
+        </label>
+
+        <label>
+          Wrap
+          <select [(ngModel)]="wrap" name="wrap">
+            <option *ngFor="let option of wrapOptions" [value]="option">{{ option }}</option>
+          </select>
+        </label>
+
+        <label>
+          Gap
+          <select [(ngModel)]="gap" name="gap">
+            <option *ngFor="let option of gapOptions" [value]="option">{{ option }}</option>
+          </select>
+        </label>
+
+        <div class="size-grid">
+          <label>
+            Alpha
+            <select [(ngModel)]="firstItemSize" name="firstItemSize">
+              <option *ngFor="let option of itemSizeOptions" [value]="option">{{ option }}</option>
+            </select>
+          </label>
+
+          <label>
+            Beta
+            <select [(ngModel)]="secondItemSize" name="secondItemSize">
+              <option *ngFor="let option of itemSizeOptions" [value]="option">{{ option }}</option>
+            </select>
+          </label>
+
+          <label>
+            Gamma
+            <select [(ngModel)]="thirdItemSize" name="thirdItemSize">
+              <option *ngFor="let option of itemSizeOptions" [value]="option">{{ option }}</option>
+            </select>
+          </label>
+        </div>
+
+        <label *ngIf="firstItemSize === 'basis'">
+          Alpha basis
+          <input [(ngModel)]="customBasis" name="customBasis" type="range" min="160" max="520" step="20">
+        </label>
+      </form>
+
+      <div class="preview-panel" data-flex>
+        <div class="stage">
+          <div class="demo-layout" [attr.data-layout]="layoutValue" data-layout-xs="column" [attr.data-gap]="gap">
+            <div class="demo-item alpha" [attr.data-flex]="firstFlexValue" data-flex-xs="w100%" [attr.style]="firstStyle">
+              <strong>Alpha</strong>
+              <span>{{ firstFlexValue }}</span>
+            </div>
+            <div class="demo-item beta" [attr.data-flex]="secondFlexValue" data-flex-xs="w100%">
+              <strong>Beta</strong>
+              <span>{{ secondFlexValue }}</span>
+            </div>
+            <div class="demo-item gamma" [attr.data-flex]="thirdFlexValue" data-flex-xs="w100%">
+              <strong>Gamma</strong>
+              <span>{{ thirdFlexValue }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="code-card">
+          <button type="button" (click)="copy(playgroundCode)">{{ copiedCode === playgroundCode ? 'Copied' : 'Copy' }}</button>
+          <pre><code>{{ playgroundCode }}</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section examples-section">
+    <div class="section-heading">
+      <p class="eyebrow">Patterns</p>
+      <h2>Common layouts that stay readable in templates.</h2>
+    </div>
+
+    <div class="example-grid">
+      <article class="example-card" *ngFor="let example of examples">
+        <div>
+          <h3>{{ example.title }}</h3>
+          <p>{{ example.note }}</p>
+        </div>
+        <div class="code-card compact">
+          <button type="button" (click)="copy(example.code)">{{ copiedCode === example.code ? 'Copied' : 'Copy' }}</button>
+          <pre><code>{{ example.code }}</code></pre>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="api" class="section">
+    <div class="section-heading">
+      <p class="eyebrow">Attribute API</p>
+      <h2>Tokens generated by the package.</h2>
+    </div>
+
+    <div class="token-grid">
+      <article class="token-card" *ngFor="let group of tokenGroups">
+        <h3>{{ group.label }}</h3>
+        <div class="token-list">
+          <code *ngFor="let value of group.values">{{ value }}</code>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="publish" class="section publish-section">
+    <div>
+      <p class="eyebrow">NPM package</p>
+      <h2>Built for manual publication.</h2>
+    </div>
+    <div class="publish-grid">
+      <pre><code>npm run build:lib
+cd dist/flex-layout
+npm publish --access public</code></pre>
+      <pre><code>npm install &#64;stagyra/flex-layout
+
+&#64;import "&#64;stagyra/flex-layout/styles/flex-layout.css";</code></pre>
+    </div>
+  </section>
+</main>

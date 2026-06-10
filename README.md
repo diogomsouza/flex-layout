@@ -1,11 +1,38 @@
-# FlexLayout
+# Flex Layout
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.0.3.
+Workspace for `@stagyra/flex-layout`, a small SCSS utility package that recreates the most useful Angular Flex-Layout style APIs with data attributes.
 
-## Development server
+Demo: https://diogomsouza.github.io/flex-layout/
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+## Projects
 
-# Configure PurgeCSS
+- `projects/flex-layout`: publishable npm package with SCSS and compiled CSS.
+- `projects/demo`: responsive demo app with live layout, breakpoint, gap, sizing, and visibility examples.
 
-npm install -D @angular-builders/custom-webpack purgecss-webpack-plugin
+## Commands
+
+```bash
+npm install
+npm run build:lib
+npm run build:demo
+npm start
+```
+
+The package is prepared for manual npm publication, but this workspace does not run `npm publish` automatically.
+
+## Package
+
+Package name: `@stagyra/flex-layout`
+
+Initial version: `0.1.0`
+
+License: MIT
+
+Publish after building:
+
+```bash
+cd dist/flex-layout
+npm publish --access public
+```
+
+See [projects/flex-layout/README.md](projects/flex-layout/README.md) for installation and API usage.

@@ -1,0 +1,273 @@
+$fl-breakpoints: (
+  "gt-lg": "screen and (min-width: 1920px)",
+  "gt-md": "screen and (min-width: 1280px)",
+  "gt-sm": "screen and (min-width: 960px)",
+  "gt-xs": "screen and (min-width: 600px)",
+  "lt-xl": "screen and (max-width: 1919.98px)",
+  "lt-lg": "screen and (max-width: 1279.98px)",
+  "lt-md": "screen and (max-width: 959.98px)",
+  "lt-sm": "screen and (max-width: 599.98px)",
+  "xl": "screen and (min-width: 1920px)",
+  "lg": "screen and (min-width: 1280px) and (max-width: 1919.98px)",
+  "md": "screen and (min-width: 960px) and (max-width: 1279.98px)",
+  "sm": "screen and (min-width: 600px) and (max-width: 959.98px)",
+  "xs": "screen and (max-width: 599.98px)"
+) !default;
+
+$fl-layout-aligns: (
+  "start": flex-start,
+  "end": flex-end,
+  "center": center,
+  "space-between": space-between,
+  "space-around": space-around,
+  "space-evenly": space-evenly
+) !default;
+
+$fl-cross-aligns: (
+  "start": flex-start,
+  "end": flex-end,
+  "center": center,
+  "stretch": stretch,
+  "baseline": baseline,
+  "space-between": space-between,
+  "space-around": space-around,
+  "space-evenly": space-evenly
+) !default;
+
+$fl-item-aligns: (
+  "start": flex-start,
+  "end": flex-end,
+  "center": center,
+  "stretch": stretch,
+  "baseline": baseline
+) !default;
+
+$fl-percent-sizes: 5, 10, 15, 20, 25, 30, 33, 34, 40, 45, 50, 55, 60, 65, 66, 67, 70, 75, 80, 85, 90, 95, 100 !default;
+$fl-pixel-sizes: 0, 1, 2, 4, 6, 8, 10, 12, 14, 16, 20, 24, 28, 32, 36, 40, 48, 56, 64, 72, 80, 96, 112, 128, 144, 160, 192, 224, 256, 288, 320, 384, 448, 512, 640, 768, 960, 1024, 1280, 1440, 1600, 1920 !default;
+$fl-responsive-pixel-sizes: 0, 8, 16, 24, 32, 48, 64, 96, 128, 160, 192, 256, 320, 384, 512 !default;
+
+@mixin fl-important($property, $value, $important: "") {
+  #{$property}: #{$value}#{$important};
+}
+
+@mixin fl-gap($suffix: "", $important: "") {
+  &[data-gap#{$suffix}~="custom"] {
+    @include fl-important(gap, var(--fl-gap, 0), $important);
+  }
+
+  @each $size in $fl-pixel-sizes {
+    &[data-gap#{$suffix}~="#{$size}px"] {
+      @include fl-important(gap, #{$size}px, $important);
+    }
+  }
+}
+
+@mixin fl-layout($breakpoint: "") {
+  $suffix: "";
+  $important: "";
+
+  @if $breakpoint != "" {
+    $suffix: "-" + $breakpoint;
+    $important: " !important";
+  }
+
+  [data-layout#{$suffix}] {
+    @include fl-important(display, flex, $important);
+    @include fl-important(box-sizing, border-box, $important);
+    @include fl-important(width, 100%, $important);
+
+    &[data-layout#{$suffix}~="row"] {
+      @include fl-important(flex-direction, row, $important);
+      @include fl-gap($suffix, $important);
+    }
+
+    &[data-layout#{$suffix}~="row-reverse"] {
+      @include fl-important(flex-direction, row-reverse, $important);
+      @include fl-gap($suffix, $important);
+    }
+
+    &[data-layout#{$suffix}~="column"] {
+      @include fl-important(flex-direction, column, $important);
+      @include fl-gap($suffix, $important);
+    }
+
+    &[data-layout#{$suffix}~="column-reverse"] {
+      @include fl-important(flex-direction, column-reverse, $important);
+      @include fl-gap($suffix, $important);
+    }
+
+    @each $name, $value in $fl-layout-aligns {
+      &[data-layout#{$suffix}~="#{$name}"] {
+        @include fl-important(justify-content, $value, $important);
+      }
+    }
+
+    @each $name, $value in $fl-cross-aligns {
+      &[data-layout#{$suffix}~="p-#{$name}"] {
+        @include fl-important(align-items, $value, $important);
+        @include fl-important(align-content, $value, $important);
+      }
+    }
+
+    &[data-layout#{$suffix}~="wrap"] {
+      @include fl-important(flex-wrap, wrap, $important);
+    }
+
+    &[data-layout#{$suffix}~="nowrap"] {
+      @include fl-important(flex-wrap, nowrap, $important);
+    }
+
+    &[data-layout#{$suffix}~="wrap-reverse"] {
+      @include fl-important(flex-wrap, wrap-reverse, $important);
+    }
+  }
+
+  [data-fill#{$suffix}] {
+    @include fl-important(width, 100%, $important);
+    @include fl-important(min-width, 100%, $important);
+    @include fl-important(max-width, 100%, $important);
+    @include fl-important(height, 100%, $important);
+    @include fl-important(min-height, 100%, $important);
+    @include fl-important(max-height, 100%, $important);
+  }
+
+  [data-hide#{$suffix}]:not([data-hide#{$suffix}="false"]) {
+    @include fl-important(display, none, $important);
+  }
+
+  @each $name, $value in $fl-layout-aligns {
+    [data-layout-align#{$suffix}~="#{$name}"] {
+      @include fl-important(justify-content, $value, $important);
+    }
+  }
+
+  @each $name, $value in $fl-cross-aligns {
+    [data-layout-align#{$suffix}~="p-#{$name}"] {
+      @include fl-important(align-items, $value, $important);
+      @include fl-important(align-content, $value, $important);
+    }
+  }
+
+  @include fl-flex($breakpoint);
+}
+
+@mixin fl-flex($breakpoint: "") {
+  $suffix: "";
+  $important: "";
+
+  @if $breakpoint != "" {
+    $suffix: "-" + $breakpoint;
+    $important: " !important";
+  }
+
+  [data-flex#{$suffix}] {
+    @include fl-important(flex, 1 1 0%, $important);
+    @include fl-important(min-width, 0, $important);
+    @include fl-important(max-width, none, $important);
+    @include fl-important(box-sizing, border-box, $important);
+
+    &[data-flex#{$suffix}~="auto"] {
+      @include fl-important(flex, 1 1 auto, $important);
+    }
+
+    &[data-flex#{$suffix}~="none"] {
+      @include fl-important(flex, none, $important);
+    }
+
+    &[data-flex#{$suffix}~="initial"] {
+      @include fl-important(flex, 0 1 auto, $important);
+    }
+
+    &[data-flex#{$suffix}~="grow"] {
+      @include fl-important(flex-grow, 1, $important);
+    }
+
+    &[data-flex#{$suffix}~="nogrow"] {
+      @include fl-important(flex-grow, 0, $important);
+    }
+
+    &[data-flex#{$suffix}~="noshrink"] {
+      @include fl-important(flex-shrink, 0, $important);
+    }
+
+    &[data-flex#{$suffix}~="basis"] {
+      @include fl-important(flex, 1 1 var(--fl-basis, auto), $important);
+      @include fl-important(min-width, var(--fl-basis, auto), $important);
+      @include fl-important(max-width, var(--fl-basis, none), $important);
+    }
+
+    @each $name, $value in $fl-item-aligns {
+      &[data-flex#{$suffix}~="#{$name}"] {
+        @include fl-important(align-self, $value, $important);
+      }
+    }
+
+    @each $size in $fl-percent-sizes {
+      &[data-flex#{$suffix}~="w#{$size}%"] {
+        @include fl-important(flex, 1 1 #{$size * 1%}, $important);
+        @include fl-important(min-width, #{$size * 1%}, $important);
+        @include fl-important(max-width, #{$size * 1%}, $important);
+      }
+
+      &[data-flex#{$suffix}~="h#{$size}%"] {
+        @include fl-important(flex, 1 1 #{$size * 1%}, $important);
+        @include fl-important(height, #{$size * 1%}, $important);
+        @include fl-important(min-height, #{$size * 1%}, $important);
+        @include fl-important(max-height, #{$size * 1%}, $important);
+      }
+    }
+
+    $pixel-sizes: $fl-pixel-sizes;
+
+    @if $breakpoint != "" {
+      $pixel-sizes: $fl-responsive-pixel-sizes;
+    }
+
+    @each $size in $pixel-sizes {
+      &[data-flex#{$suffix}~="w#{$size}px"] {
+        @include fl-important(flex, 1 1 #{$size}px, $important);
+        @include fl-important(min-width, #{$size}px, $important);
+        @include fl-important(max-width, #{$size}px, $important);
+      }
+
+      &[data-flex#{$suffix}~="h#{$size}px"] {
+        @include fl-important(flex, 1 1 #{$size}px, $important);
+        @include fl-important(height, #{$size}px, $important);
+        @include fl-important(min-height, #{$size}px, $important);
+        @include fl-important(max-height, #{$size}px, $important);
+      }
+    }
+  }
+
+  @each $size in $fl-percent-sizes {
+    [data-offset#{$suffix}~="w#{$size}%"] {
+      @include fl-important(margin-left, #{$size * 1%}, $important);
+    }
+  }
+
+  $offset-pixel-sizes: $fl-pixel-sizes;
+
+  @if $breakpoint != "" {
+    $offset-pixel-sizes: $fl-responsive-pixel-sizes;
+  }
+
+  @each $size in $offset-pixel-sizes {
+    [data-offset#{$suffix}~="w#{$size}px"] {
+      @include fl-important(margin-left, #{$size}px, $important);
+    }
+  }
+
+  @each $name, $value in $fl-item-aligns {
+    [data-flex-align#{$suffix}="#{$name}"] {
+      @include fl-important(align-self, $value, $important);
+    }
+  }
+}
+
+@include fl-layout();
+
+@each $breakpoint, $media-query in $fl-breakpoints {
+  @media #{$media-query} {
+    @include fl-layout($breakpoint);
+  }
+}
