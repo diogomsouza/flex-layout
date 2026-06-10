@@ -1,3 +1,25 @@
+@use "sass:list";
+
+@function fl-range($start, $end, $step: 1) {
+  $values: ();
+
+  @if $step <= 0 {
+    @error "$step must be greater than zero.";
+  }
+
+  @for $value from $start through $end {
+    @if ($value - $start) % $step == 0 {
+      $values: list.append($values, $value, comma);
+    }
+  }
+
+  @return $values;
+}
+
+@function fl-pixel-scale() {
+  @return list.join(fl-range(0, 1024, 2), fl-range(1030, 1920, 10), comma);
+}
+
 $fl-breakpoints: (
   "gt-lg": "screen and (min-width: 1920px)",
   "gt-md": "screen and (min-width: 1280px)",
@@ -43,8 +65,12 @@ $fl-item-aligns: (
 ) !default;
 
 $fl-percent-sizes: 5, 10, 15, 20, 25, 30, 33, 34, 40, 45, 50, 55, 60, 65, 66, 67, 70, 75, 80, 85, 90, 95, 100 !default;
-$fl-pixel-sizes: 0, 1, 2, 4, 6, 8, 10, 12, 14, 16, 20, 24, 28, 32, 36, 40, 48, 56, 64, 72, 80, 96, 112, 128, 144, 160, 192, 224, 256, 288, 320, 384, 448, 512, 640, 768, 960, 1024, 1280, 1440, 1600, 1920 !default;
-$fl-responsive-pixel-sizes: 0, 8, 16, 24, 32, 48, 64, 96, 128, 160, 192, 256, 320, 384, 512 !default;
+$fl-gap-sizes: fl-range(0, 100) !default;
+$fl-pixel-sizes: fl-pixel-scale() !default;
+$fl-responsive-pixel-sizes: $fl-pixel-sizes !default;
+$fl-include-gap-sizes: true !default;
+$fl-include-percent-sizes: true !default;
+$fl-include-pixel-sizes: true !default;
 
 @mixin fl-important($property, $value, $important: "") {
   #{$property}: #{$value}#{$important};
@@ -55,9 +81,11 @@ $fl-responsive-pixel-sizes: 0, 8, 16, 24, 32, 48, 64, 96, 128, 160, 192, 256, 32
     @include fl-important(gap, var(--fl-gap, 0), $important);
   }
 
-  @each $size in $fl-pixel-sizes {
-    &[data-gap#{$suffix}~="#{$size}px"] {
-      @include fl-important(gap, #{$size}px, $important);
+  @if $fl-include-gap-sizes {
+    @each $size in $fl-gap-sizes {
+      &[data-gap#{$suffix}~="#{$size}px"] {
+        @include fl-important(gap, #{$size}px, $important);
+      }
     }
   }
 }
@@ -202,18 +230,20 @@ $fl-responsive-pixel-sizes: 0, 8, 16, 24, 32, 48, 64, 96, 128, 160, 192, 256, 32
       }
     }
 
-    @each $size in $fl-percent-sizes {
-      &[data-flex#{$suffix}~="w#{$size}%"] {
-        @include fl-important(flex, 1 1 #{$size * 1%}, $important);
-        @include fl-important(min-width, #{$size * 1%}, $important);
-        @include fl-important(max-width, #{$size * 1%}, $important);
-      }
+    @if $fl-include-percent-sizes {
+      @each $size in $fl-percent-sizes {
+        &[data-flex#{$suffix}~="w#{$size}%"] {
+          @include fl-important(flex, 1 1 #{$size * 1%}, $important);
+          @include fl-important(min-width, #{$size * 1%}, $important);
+          @include fl-important(max-width, #{$size * 1%}, $important);
+        }
 
-      &[data-flex#{$suffix}~="h#{$size}%"] {
-        @include fl-important(flex, 1 1 #{$size * 1%}, $important);
-        @include fl-important(height, #{$size * 1%}, $important);
-        @include fl-important(min-height, #{$size * 1%}, $important);
-        @include fl-important(max-height, #{$size * 1%}, $important);
+        &[data-flex#{$suffix}~="h#{$size}%"] {
+          @include fl-important(flex, 1 1 #{$size * 1%}, $important);
+          @include fl-important(height, #{$size * 1%}, $important);
+          @include fl-important(min-height, #{$size * 1%}, $important);
+          @include fl-important(max-height, #{$size * 1%}, $important);
+        }
       }
     }
 
@@ -223,25 +253,29 @@ $fl-responsive-pixel-sizes: 0, 8, 16, 24, 32, 48, 64, 96, 128, 160, 192, 256, 32
       $pixel-sizes: $fl-responsive-pixel-sizes;
     }
 
-    @each $size in $pixel-sizes {
-      &[data-flex#{$suffix}~="w#{$size}px"] {
-        @include fl-important(flex, 1 1 #{$size}px, $important);
-        @include fl-important(min-width, #{$size}px, $important);
-        @include fl-important(max-width, #{$size}px, $important);
-      }
+    @if $fl-include-pixel-sizes {
+      @each $size in $pixel-sizes {
+        &[data-flex#{$suffix}~="w#{$size}px"] {
+          @include fl-important(flex, 1 1 #{$size}px, $important);
+          @include fl-important(min-width, #{$size}px, $important);
+          @include fl-important(max-width, #{$size}px, $important);
+        }
 
-      &[data-flex#{$suffix}~="h#{$size}px"] {
-        @include fl-important(flex, 1 1 #{$size}px, $important);
-        @include fl-important(height, #{$size}px, $important);
-        @include fl-important(min-height, #{$size}px, $important);
-        @include fl-important(max-height, #{$size}px, $important);
+        &[data-flex#{$suffix}~="h#{$size}px"] {
+          @include fl-important(flex, 1 1 #{$size}px, $important);
+          @include fl-important(height, #{$size}px, $important);
+          @include fl-important(min-height, #{$size}px, $important);
+          @include fl-important(max-height, #{$size}px, $important);
+        }
       }
     }
   }
 
-  @each $size in $fl-percent-sizes {
-    [data-offset#{$suffix}~="w#{$size}%"] {
-      @include fl-important(margin-left, #{$size * 1%}, $important);
+  @if $fl-include-percent-sizes {
+    @each $size in $fl-percent-sizes {
+      [data-offset#{$suffix}~="w#{$size}%"] {
+        @include fl-important(margin-left, #{$size * 1%}, $important);
+      }
     }
   }
 
@@ -251,9 +285,11 @@ $fl-responsive-pixel-sizes: 0, 8, 16, 24, 32, 48, 64, 96, 128, 160, 192, 256, 32
     $offset-pixel-sizes: $fl-responsive-pixel-sizes;
   }
 
-  @each $size in $offset-pixel-sizes {
-    [data-offset#{$suffix}~="w#{$size}px"] {
-      @include fl-important(margin-left, #{$size}px, $important);
+  @if $fl-include-pixel-sizes {
+    @each $size in $offset-pixel-sizes {
+      [data-offset#{$suffix}~="w#{$size}px"] {
+        @include fl-important(margin-left, #{$size}px, $important);
+      }
     }
   }
 

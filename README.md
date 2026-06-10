@@ -24,7 +24,7 @@ The package is prepared for manual npm publication, but this workspace does not 
 
 Package name: `@stagyra/flex-layout`
 
-Initial version: `0.1.0`
+Current version: `0.1.1`
 
 License: MIT
 
