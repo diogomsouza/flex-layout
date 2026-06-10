@@ -344,6 +344,12 @@ pre {
   gap: 8px;
 }
 
+.token-card p {
+  color: var(--demo-muted);
+  font-size: 0.92rem;
+  margin-bottom: 12px;
+}
+
 .token-list code {
   background: var(--demo-code-bg);
   border-radius: 6px;

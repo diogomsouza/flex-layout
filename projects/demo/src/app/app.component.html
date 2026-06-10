@@ -11,7 +11,7 @@
     </div>
   </nav>
 
-  <section class="hero" data-layout="row" data-layout-lt-md="column" data-gap="32px">
+  <section class="hero" data-layout="row" data-layout-lt-md="column" data-gap="20px">
     <div class="hero-copy" data-flex>
       <p class="eyebrow">&#64;stagyra/flex-layout</p>
       <h1>Responsive SCSS layout utilities with data attributes.</h1>
@@ -46,7 +46,7 @@
       <h2>Compose the attributes and inspect the result.</h2>
     </div>
 
-    <div class="playground-shell" data-layout="row" data-layout-lt-lg="column" data-gap="24px">
+    <div class="playground-shell" data-layout="row" data-layout-lt-lg="column" data-gap="20px">
       <form class="controls" data-flex="basis" data-flex-lt-lg="w100%" style="--fl-basis: 360px">
         <label>
           Direction
@@ -167,6 +167,7 @@
     <div class="token-grid">
       <article class="token-card" *ngFor="let group of tokenGroups">
         <h3>{{ group.label }}</h3>
+        <p *ngIf="group.note">{{ group.note }}</p>
         <div class="token-list">
           <code *ngFor="let value of group.values">{{ value }}</code>
         </div>

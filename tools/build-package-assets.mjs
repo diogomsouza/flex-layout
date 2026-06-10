@@ -3,18 +3,19 @@ import { resolve } from 'node:path';
 import * as sass from 'sass';
 
 const root = resolve('.');
-const sourceStyles = resolve(root, 'projects/flex-layout/src/styles');
+const sourceScss = resolve(root, 'projects/flex-layout/src/styles/flex-layout.scss');
 const distRoot = resolve(root, 'dist/flex-layout');
 const distStyles = resolve(distRoot, 'styles');
 const distLicense = resolve(distRoot, 'LICENSE');
 const distPackageJson = resolve(distRoot, 'package.json');
+const cssName = 'flex-layout.css';
+const scssName = 'flex-layout.scss';
 
 if (!existsSync(distRoot)) {
   throw new Error('dist/flex-layout was not found. Run ng build flex-layout first.');
 }
 
 mkdirSync(distStyles, { recursive: true });
-
 copyFileSync(resolve(root, 'LICENSE'), distLicense);
 
 for (const directory of [distRoot, distStyles]) {
@@ -25,44 +26,36 @@ for (const directory of [distRoot, distStyles]) {
   }
 }
 
-const styleEntries = [];
+const compiled = sass.compile(sourceScss, {
+  style: 'compressed',
+  sourceMap: false,
+});
 
-for (const fileName of readdirSync(sourceStyles)) {
-  if (!/^flex-layout.*\.scss$/.test(fileName)) {
-    continue;
-  }
-
-  const sourceScss = resolve(sourceStyles, fileName);
-  const cssName = fileName.replace(/\.scss$/, '.css');
-  const entryName = fileName.replace(/\.scss$/, '');
-  const compiled = sass.compile(sourceScss, {
-    style: 'compressed',
-    sourceMap: false,
-  });
-
-  copyFileSync(sourceScss, resolve(distStyles, fileName));
-  writeFileSync(resolve(distStyles, cssName), `${compiled.css}\n`);
-  styleEntries.push({ entryName, scssName: fileName, cssName });
-}
+copyFileSync(sourceScss, resolve(distStyles, scssName));
+writeFileSync(resolve(distStyles, cssName), `${compiled.css}\n`);
 
 const packageJson = JSON.parse(readFileSync(distPackageJson, 'utf8'));
-const exportsMap = packageJson.exports ?? {};
+packageJson.exports = {
+  './package.json': {
+    default: './package.json',
+  },
+  '.': packageJson.exports?.['.'] ?? {
+    types: './types/stagyra-flex-layout.d.ts',
+    default: './fesm2022/stagyra-flex-layout.mjs',
+  },
+  './styles/flex-layout.css': {
+    style: './styles/flex-layout.css',
+    default: './styles/flex-layout.css',
+  },
+  './styles/flex-layout.scss': {
+    sass: './styles/flex-layout.scss',
+    default: './styles/flex-layout.scss',
+  },
+  './styles/flex-layout': {
+    sass: './styles/flex-layout.scss',
+    style: './styles/flex-layout.css',
+    default: './styles/flex-layout.scss',
+  },
+};
 
-for (const { entryName, scssName, cssName } of styleEntries) {
-  exportsMap[`./styles/${cssName}`] = {
-    style: `./styles/${cssName}`,
-    default: `./styles/${cssName}`,
-  };
-  exportsMap[`./styles/${scssName}`] = {
-    sass: `./styles/${scssName}`,
-    default: `./styles/${scssName}`,
-  };
-  exportsMap[`./styles/${entryName}`] = {
-    sass: `./styles/${scssName}`,
-    style: `./styles/${cssName}`,
-    default: `./styles/${scssName}`,
-  };
-}
-
-packageJson.exports = exportsMap;
 writeFileSync(distPackageJson, `${JSON.stringify(packageJson, null, 2)}\n`);

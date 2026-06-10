@@ -16,6 +16,7 @@ interface Example {
 interface TokenGroup {
   label: string;
   values: string[];
+  note?: string;
 }
 
 @Component({
@@ -30,8 +31,14 @@ export class AppComponent {
   mainAxisOptions: MainAxis[] = ['start', 'center', 'end', 'space-between', 'space-around', 'space-evenly'];
   crossAxisOptions: CrossAxis[] = ['start', 'center', 'end', 'stretch', 'baseline'];
   wrapOptions: WrapMode[] = ['wrap', 'nowrap', 'wrap-reverse'];
-  gapOptions = ['0px', '4px', '8px', '12px', '16px', '24px', '32px'];
+  gapOptions = ['1px', '2px', '4px', '8px', '12px', '16px', '20px'];
   itemSizeOptions = ['auto', 'w25%', 'w33%', 'w50%', 'w67%', 'w100%', 'w160px', 'w256px', 'basis'];
+  percentScale = ['5%', '10%', '15%', '20%', '25%', '30%', '33%', '34%', '40%', '45%', '50%', '55%', '60%', '65%', '66%', '67%', '70%', '75%', '80%', '85%', '90%', '95%', '100%'];
+  pixelScale = [
+    '0px to 1024px: even values only',
+    '1030px to 1920px: every 10px',
+  ];
+  gapScale = ['1px to 20px', 'custom via --fl-gap'];
 
   direction: Direction = 'row';
   mainAxis: MainAxis = 'space-between';
@@ -59,6 +66,21 @@ export class AppComponent {
       values: ['auto', 'none', 'initial', 'grow', 'nogrow', 'noshrink', 'basis', 'w25%', 'w33%', 'w50%', 'w100%', 'w320px'],
     },
     {
+      label: 'Percent sizes',
+      values: this.percentScale,
+      note: 'Use as w/h tokens: w50%, h100%, data-flex-xs="w100%".',
+    },
+    {
+      label: 'Pixel sizes',
+      values: this.pixelScale,
+      note: 'Use as w/h tokens: w320px, h128px, data-flex-gt-md="w1440px".',
+    },
+    {
+      label: 'Gap sizes',
+      values: this.gapScale,
+      note: 'Generated data-gap values are intentionally limited.',
+    },
+    {
       label: 'Responsive',
       values: ['data-layout-xs', 'data-layout-lt-md', 'data-flex-xs', 'data-hide-lt-md', 'data-hide-gt-sm'],
     },
@@ -75,9 +97,15 @@ export class AppComponent {
     },
     {
       title: 'Fixed sidebar with flexible content',
-      note: 'Use CSS variables when a project needs a size outside the generated scale.',
-      code: `<div data-layout="row" data-layout-xs="column" data-gap="24px">
-  <aside data-flex="basis" style="--fl-basis: 320px">Filters</aside>
+      note: 'Use base and breakpoint CSS variables when basis must change responsively.',
+      code: `<div data-layout="row" data-layout-xs="column" data-gap="20px">
+  <aside
+    data-flex="basis"
+    data-flex-xs="basis"
+    style="--fl-basis: 320px; --fl-basis-xs: 100%"
+  >
+    Filters
+  </aside>
   <main data-flex>Results</main>
 </div>`,
     },

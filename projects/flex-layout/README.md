@@ -12,26 +12,11 @@ npm install @stagyra/flex-layout
 
 ## Import
 
-Use the complete compiled CSS:
+Use the compiled CSS:
 
 ```scss
 @import "@stagyra/flex-layout/styles/flex-layout.css";
 ```
-
-Or import a smaller compiled entrypoint:
-
-```scss
-@import "@stagyra/flex-layout/styles/flex-layout-core.css";
-@import "@stagyra/flex-layout/styles/flex-layout-percent.css";
-@import "@stagyra/flex-layout/styles/flex-layout-pixels.css";
-```
-
-| Entrypoint | Includes | Use when |
-| --- | --- | --- |
-| `flex-layout-core.css` | Layout directions, wrap, alignments, fill, hide, basic `data-flex`, `basis`, and `data-gap="custom"`. | You mainly use `data-flex`, `auto`, `basis`, and custom CSS variables. |
-| `flex-layout-percent.css` | Core plus percentage `data-flex` and percentage `data-offset`; no pixel flex/offset utilities. | Your layouts use mostly `w50%`, `w100%`, responsive percentages, and custom basis for exact pixel values. |
-| `flex-layout-pixels.css` | Core plus pixel `data-flex`, pixel `data-offset`, and generated pixel gaps; no percentage flex/offset utilities. | Your layouts use fixed pixel widths/heights and offsets. |
-| `flex-layout.css` | Full package: core, percentages, pixels, and generated pixel gaps. | You want every utility available without tuning. |
 
 Or import and configure the SCSS source:
 
@@ -43,7 +28,7 @@ Or import and configure the SCSS source:
 @use "@stagyra/flex-layout/styles/flex-layout" with (
   $fl-pixel-sizes: 0, 8, 16, 24, 32, 64, 128, 256, 512,
   $fl-responsive-pixel-sizes: 0, 8, 16, 24, 32, 64, 128, 256, 512,
-  $fl-gap-sizes: 0, 8, 16, 24, 32
+  $fl-gap-sizes: 1, 2, 4, 8, 12, 16, 20
 );
 ```
 
@@ -130,7 +115,15 @@ Percentage utilities include common layout sizes from `w5%` to `w100%`, includin
 
 Pixel utilities for `data-flex` and `data-offset` include even pixel values from `0px` through `1024px`, then every `10px` from `1030px` through `1920px`. The responsive suffixes use the same pixel scale, so values such as `data-flex-gt-md="w1440px"` are generated.
 
-Gap utilities support every pixel from `0px` through `100px`, plus `custom`.
+Gap utilities support only `1px` through `20px`, plus `custom`.
+
+Summary of generated size values:
+
+| Utility | Generated values |
+| --- | --- |
+| Percent `data-flex` and `data-offset` | `5%`, `10%`, `15%`, `20%`, `25%`, `30%`, `33%`, `34%`, `40%`, `45%`, `50%`, `55%`, `60%`, `65%`, `66%`, `67%`, `70%`, `75%`, `80%`, `85%`, `90%`, `95%`, `100%` |
+| Pixel `data-flex` and `data-offset` | Even values from `0px` through `1024px`, then every `10px` from `1030px` through `1920px` |
+| Gap `data-gap` | Every pixel from `1px` through `20px`, plus `custom` |
 
 For values outside the generated scale, or values that should not be generated globally, use CSS custom properties:
 
@@ -141,7 +134,23 @@ For values outside the generated scale, or values that should not be generated g
 </div>
 ```
 
-`--fl-basis` accepts any valid CSS size value, including `520px`, `32rem`, `45%`, `calc(100% - 280px)`, and `clamp(280px, 32vw, 520px)`. Inline styles apply the same custom value wherever `data-flex*="basis"` is active. If you need different custom basis values per breakpoint, define the variable in CSS with media queries.
+`--fl-basis` accepts any valid CSS size value, including `520px`, `32rem`, `45%`, `calc(100% - 280px)`, and `clamp(280px, 32vw, 520px)`.
+
+Use breakpoint-specific variables when `basis` is active in a responsive `data-flex-*` attribute:
+
+```html
+<aside
+  data-flex="basis"
+  data-flex-xs="basis"
+  style="--fl-basis: 320px; --fl-basis-xs: 100%"
+>
+  Filters
+</aside>
+```
+
+Supported variable suffixes match the breakpoint names: `--fl-basis-xs`, `--fl-basis-sm`, `--fl-basis-md`, `--fl-basis-lg`, `--fl-basis-xl`, `--fl-basis-gt-xs`, `--fl-basis-gt-sm`, `--fl-basis-gt-md`, `--fl-basis-gt-lg`, `--fl-basis-lt-sm`, `--fl-basis-lt-md`, `--fl-basis-lt-lg`, and `--fl-basis-lt-xl`.
+
+Each breakpoint variable falls back to `--fl-basis`, then to `auto`.
 
 ## Reducing CSS in Consumer Apps
 
