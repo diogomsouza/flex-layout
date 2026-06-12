@@ -1,6 +1,6 @@
 {
   "name": "@stagyra/flex-layout",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "license": "MIT",
   "description": "SCSS flexbox layout utilities using responsive data attributes.",
   "style": "styles/flex-layout.css",
