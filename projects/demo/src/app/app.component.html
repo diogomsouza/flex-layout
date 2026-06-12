@@ -83,6 +83,13 @@
           </select>
         </label>
 
+        <label>
+          Alpha align
+          <select [(ngModel)]="alphaFlexAlign" name="alphaFlexAlign">
+            <option *ngFor="let option of flexAlignOptions" [value]="option">{{ option }}</option>
+          </select>
+        </label>
+
         <div class="size-grid">
           <label>
             Alpha
@@ -115,9 +122,10 @@
       <div class="preview-panel" data-flex>
         <div class="stage">
           <div class="demo-layout" [attr.data-layout]="layoutValue" data-layout-xs="column" [attr.data-gap]="gap">
-            <div class="demo-item alpha" [attr.data-flex]="firstFlexValue" data-flex-xs="w100%" [attr.style]="firstStyle">
+            <div class="demo-item alpha" [attr.data-flex]="firstFlexValue" data-flex-xs="w100%" [attr.data-flex-align]="alphaFlexAlignAttr" [attr.style]="firstStyle">
               <strong>Alpha</strong>
               <span>{{ firstFlexValue }}</span>
+              <span *ngIf="alphaFlexAlignAttr">align {{ alphaFlexAlignAttr }}</span>
             </div>
             <div class="demo-item beta" [attr.data-flex]="secondFlexValue" data-flex-xs="w100%">
               <strong>Beta</strong>

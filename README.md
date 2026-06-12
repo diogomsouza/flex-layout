@@ -24,9 +24,22 @@ The package is prepared for manual npm publication, but this workspace does not 
 
 Package name: `@stagyra/flex-layout`
 
-Current version: `0.1.3`
+Current version: `0.1.4`
 
 License: MIT
+
+Basic usage:
+
+```html
+<div data-layout="row wrap space-between p-stretch" data-gap="16px">
+  <aside data-flex="basis" data-flex-xs="w100%" data-flex-align="center" style="--fl-basis: 320px">
+    Filters
+  </aside>
+  <main data-flex data-flex-align="stretch">Results</main>
+</div>
+```
+
+Use `data-flex-align` to apply `align-self` to one flex item without changing the container alignment. Responsive suffixes are supported, such as `data-flex-align-xs="stretch"` and `data-flex-align-gt-md="start"`.
 
 Publish after building:
 

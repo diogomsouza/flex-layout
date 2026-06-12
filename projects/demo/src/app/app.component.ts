@@ -6,6 +6,7 @@ type Direction = 'row' | 'row-reverse' | 'column' | 'column-reverse';
 type MainAxis = 'start' | 'center' | 'end' | 'space-between' | 'space-around' | 'space-evenly';
 type CrossAxis = 'start' | 'center' | 'end' | 'stretch' | 'baseline';
 type WrapMode = 'wrap' | 'nowrap' | 'wrap-reverse';
+type FlexAlign = 'default' | 'start' | 'center' | 'end' | 'stretch' | 'baseline';
 
 interface Example {
   title: string;
@@ -31,6 +32,7 @@ export class AppComponent {
   mainAxisOptions: MainAxis[] = ['start', 'center', 'end', 'space-between', 'space-around', 'space-evenly'];
   crossAxisOptions: CrossAxis[] = ['start', 'center', 'end', 'stretch', 'baseline'];
   wrapOptions: WrapMode[] = ['wrap', 'nowrap', 'wrap-reverse'];
+  flexAlignOptions: FlexAlign[] = ['default', 'start', 'center', 'end', 'stretch', 'baseline'];
   gapOptions = ['1px', '2px', '4px', '8px', '12px', '16px', '20px'];
   itemSizeOptions = ['auto', 'w25%', 'w33%', 'w50%', 'w67%', 'w100%', 'w160px', 'w256px', 'basis'];
   percentScale = ['5%', '10%', '15%', '20%', '25%', '30%', '33%', '34%', '40%', '45%', '50%', '55%', '60%', '65%', '66%', '67%', '70%', '75%', '80%', '85%', '90%', '95%', '100%'];
@@ -48,6 +50,7 @@ export class AppComponent {
   firstItemSize = 'w33%';
   secondItemSize = 'w33%';
   thirdItemSize = 'w33%';
+  alphaFlexAlign: FlexAlign = 'center';
   customBasis = 280;
   copiedCode = '';
   viewportWidth = this.getViewportWidth();
@@ -64,6 +67,11 @@ export class AppComponent {
     {
       label: 'Flex',
       values: ['auto', 'none', 'initial', 'grow', 'nogrow', 'noshrink', 'basis', 'w25%', 'w33%', 'w50%', 'w100%', 'w320px'],
+    },
+    {
+      label: 'Item align',
+      values: ['data-flex-align="start"', 'data-flex-align="center"', 'data-flex-align="end"', 'data-flex-align="stretch"', 'data-flex-align="baseline"', 'data-flex-align-xs="stretch"'],
+      note: 'Applies align-self to one flex item, including responsive breakpoint suffixes.',
     },
     {
       label: 'Percent sizes',
@@ -159,11 +167,16 @@ export class AppComponent {
     return this.firstItemSize === 'basis' ? `--fl-basis: ${this.customBasis}px` : null;
   }
 
+  get alphaFlexAlignAttr(): string | null {
+    return this.alphaFlexAlign === 'default' ? null : this.alphaFlexAlign;
+  }
+
   get playgroundCode(): string {
+    const alphaAlign = this.alphaFlexAlignAttr ? ` data-flex-align="${this.alphaFlexAlignAttr}"` : '';
     const firstStyle = this.firstStyle ? ` style="${this.firstStyle}"` : '';
 
     return `<div data-layout="${this.layoutValue}" data-layout-xs="column" data-gap="${this.gap}">
-  <div data-flex="${this.firstFlexValue}" data-flex-xs="w100%"${firstStyle}>Alpha</div>
+  <div data-flex="${this.firstFlexValue}" data-flex-xs="w100%"${alphaAlign}${firstStyle}>Alpha</div>
   <div data-flex="${this.secondFlexValue}" data-flex-xs="w100%">Beta</div>
   <div data-flex="${this.thirdFlexValue}" data-flex-xs="w100%">Gamma</div>
 </div>`;

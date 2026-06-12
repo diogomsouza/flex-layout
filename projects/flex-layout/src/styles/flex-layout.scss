@@ -95,7 +95,7 @@ $fl-responsive-pixel-sizes: $fl-pixel-sizes !default;
   }
 
   [data-layout#{$suffix}] {
-    @include fl-important(display, flex, $important);
+    @include fl-important(display, flex, " !important");
     @include fl-important(box-sizing, border-box, $important);
     @include fl-important(width, 100%, $important);
 

@@ -50,6 +50,8 @@ Or import and configure the SCSS source:
 | `data-layout-align` | `space-between p-stretch` | Applies alignment without changing direction. |
 | `data-flex` | `w50%`, `w320px`, `auto`, `basis` | Controls an item basis, width, height, growth, shrink, or self alignment. |
 | `data-flex-{breakpoint}` | `data-flex-lt-md="w100%"` | Overrides flex item behavior by breakpoint. |
+| `data-flex-align` | `center`, `stretch`, `baseline` | Applies `align-self` to one flex item without changing its size token. |
+| `data-flex-align-{breakpoint}` | `data-flex-align-xs="stretch"` | Overrides item self alignment by breakpoint. |
 | `data-gap` | `16px`, `custom` | Applies native flex `gap`. Use `custom` with `--fl-gap`. |
 | `data-offset` | `w25%`, `w24px` | Applies `margin-left`. |
 | `data-fill` | empty attribute | Sets width and height to `100%`. |
@@ -84,6 +86,27 @@ Prefix cross-axis values with `p-`:
 - `p-space-between`
 - `p-space-around`
 - `p-space-evenly`
+
+## Item Alignment
+
+Use `data-flex-align` when one item needs a different `align-self` value from the container cross-axis alignment:
+
+```html
+<div data-layout="row wrap p-stretch" data-gap="16px">
+  <aside data-flex="basis" data-flex-align="start" style="--fl-basis: 320px">
+    Filters
+  </aside>
+  <main data-flex data-flex-align-xs="stretch">Results</main>
+</div>
+```
+
+Supported values:
+
+- `start`
+- `center`
+- `end`
+- `stretch`
+- `baseline`
 
 ## Wrap
 
@@ -181,6 +204,7 @@ safelist: {
   greedy: [
     /data-layout/,
     /data-flex/,
+    /data-flex-align/,
     /data-gap/,
     /data-offset/,
     /data-hide/,
